@@ -69,6 +69,8 @@ const blogRouter = require("./routes/blogRoute");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const morgan = require("morgan");
+const messageRouter = require("./routes/messageRoute"); // Add this line
+
 
 dbConnected();
 
@@ -89,6 +91,7 @@ app.use("/api/coupon", couponRouter);
 app.use("/api/color", colorRouter);
 app.use("/api/enquiry", enqRouter);
 app.use("/api/upload", uploadRouter);
+app.use("/api/message", messageRouter);
 
 app.use(notFound);
 app.use(errorHandler);
