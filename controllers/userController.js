@@ -8,7 +8,7 @@ const { generateRefreshToken } = require("../config/refreschToken");
 const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
 // const { response } = require("express");
-const sendEmail = require("./emailController.js");
+
 
 //create a user
 const createUser = asyncHandler(async (req, res) => {
@@ -245,114 +245,28 @@ const unblockUser = asyncHandler(async (req, res) => {
 });
 // save user Address
 
-const saveAddress = asyncHandler(async (req, res, next) => {
-  const { _id } = req.user;
-  validateMongoDbId(_id);
-
-  try {
-    const updatedUser = await User.findByIdAndUpdate(
-      _id,
-      {
-        address: req?.body?.address,
-      },
-      {
-        new: true,
-      }
-    );
-    res.json(updatedUser);
-  } catch (error) {
-    throw new Error(error);
-  }
-});
-
-//update password
-const updatePassword = asyncHandler(async (req, res) => {
-  const { _id } = req.user; // Extract user ID from request user object
-  const { password } = req.body; // Extract password from request body
-
-  // Validate if _id is provided and exists
-  mongoDbValidation(_id);
-
-  try {
-    // Update the user's password only if password is provided
-    if (password) {
-      // Find the user by ID
-      const user = await User.findById(_id);
-
-      // Set the new password
-      user.password = password; // Ensure that password is a string
-
-      // Save the updated user object
-      const updatedUser = await user.save();
-
-      // Send the updated user object as a response
-      return res.json(updatedUser);
-    } else {
-      // If password is not provided, send an error response
-      return res.status(400).json({ message: "Password is required" });
-    }
-  } catch (error) {
-    // Handle any errors that occur during password update
-    return res
-      .status(500)
-      .json({ message: "Server Error", error: error.message });
-  }
-});
-
-// const updatePassword = asyncHandler(async (req, res) => {
+// const saveAddress = asyncHandler(async (req, res, next) => {
 //   const { _id } = req.user;
-//   const password = req.body;
-//   mongoDbValidation(_id);
-//   const user = await User.findById(_id);
-//   if (password) {
-//     user.password = password;
-//     const updatedPassword = await user.save();
-//     res.json(updatedPassword);
-//   } else {
-//     res.json(user);
+//   validateMongoDbId(_id);
+
+//   try {
+//     const updatedUser = await User.findByIdAndUpdate(
+//       _id,
+//       {
+//         address: req?.body?.address,
+//       },
+//       {
+//         new: true,
+//       }
+//     );
+//     res.json(updatedUser);
+//   } catch (error) {
+//     throw new Error(error);
 //   }
 // });
 
-//forgot password
-const forgotPasswordToken = asyncHandler(async (req, res) => {
-  const { email } = req.body;
-  const user = await User.findOne({ email });
-  if (!user) throw new Error("User not found");
-  try {
-    const token = await user.createPasswordResetToken(); // Call createPasswordToken on the user object
-    await user.save();
-    const resetURL = `Hallo, please click this link in order to reset your password, and its valid 10min from now. <a href='http://localhost:5000/api/user/reset-password/${token}'>click Here</a>`;
-    const data = {
-      to: email,
-      text: "Hallo User",
-      subject: "forgot password link",
-      htm: resetURL,
-    };
-    // Assuming sendEmail is defined elsewhere
-    sendEmail(data);
-    res.json(token);
-  } catch (error) {
-    throw new Error(error); // Just throw the error without wrapping it
-  }
-});
+//update password
 
-// reset password
-
-const resetPassword = asyncHandler(async (req, res) => {
-  const { password } = req.body;
-  const { token } = req.params;
-  const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
-  const user = await User.findOne({
-    passwordResetToken: hashedToken,
-    passwordResetExpires: { $gt: Date.now() },
-  });
-  if (!user) throw new Error("User not found");
-  user.password = password;
-  user.passwordResetToken = undefined;
-  user.passwordResetExpires = undefined;
-  await user.save();
-  res.json(user);
-});
 const updateProfilePicture = asyncHandler(async (req, res) => {
   const { _id } = req.user;
   const { profilePicture } = req.body;
@@ -404,10 +318,7 @@ module.exports = {
   unblockUser,
   HandelRefreshToken,
   logout,
-  updatePassword,
-  forgotPasswordToken,
-  resetPassword,
-  saveAddress,
+  // saveAddress,
   loginAdmin,
   updateDashboardSettings,
   updateProfilePicture

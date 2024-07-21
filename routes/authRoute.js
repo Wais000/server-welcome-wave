@@ -10,11 +10,11 @@ const {
   unblockUser,
   HandelRefreshToken,
   logout,
-  updatePassword,
-  forgotPasswordToken,
-  resetPassword,
+  // updatePassword,
+  // forgotPasswordToken,
+  // resetPassword,
   loginAdmin,
-  saveAddress,
+  // saveAddress,
   updateProfilePicture,
   updateDashboardSettings,
 
@@ -27,13 +27,13 @@ const router = express.Router();
 
 
 router.post("/register", createUser);
-router.put("/password",authMiddleware, updatePassword);
+// router.put("/password",authMiddleware, updatePassword);
 router.post("/login", LoginUserController);
 router.post("/admin-login", loginAdmin);
 router.get("/all-users", getAllUsers);
 
-router.post("/forgot-password-token", forgotPasswordToken);
-router.put("/reset-password/:token", resetPassword);
+// router.post("/forgot-password-token", forgotPasswordToken);
+// router.put("/reset-password/:token", resetPassword);
 router.get("/refresh", HandelRefreshToken);
 router.get("/logout", logout);
 router.get("/:id",authMiddleware,isAdmin, getSingUser);
@@ -47,7 +47,7 @@ router.put(
 );
 router.put("/edit-user",authMiddleware, updatedUser);
 router.put("/block-user/:id",authMiddleware,isAdmin,blockUser );
-router.put("/save-address", authMiddleware, saveAddress);
+// router.put("/save-address", authMiddleware, saveAddress);
 router.put("/unblock-user/:id",authMiddleware,isAdmin, unblockUser );
 router.put("/profile-picture", authMiddleware, updateProfilePicture);
 router.put("/dashboard-settings", authMiddleware, updateDashboardSettings);

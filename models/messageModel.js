@@ -4,25 +4,30 @@ const messageSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: true,
+      // required: true,
     },
     email: {
       type: String,
-      required: true,
+      // required: true,
     },
     message: {
       type: String,
-      required: true,
+      // required: true,
     },
-    accommodation: {
+    type: {
+      type: String,
+      enum: ['accommodation', 'job', 'help'],
+      // required: true,
+    },
+    referenceId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Accommodation",
       required: true,
+      // refPath: 'type'
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true,
+      // required: true,
     },
   },
   { timestamps: true }
